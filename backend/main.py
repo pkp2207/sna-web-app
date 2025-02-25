@@ -9,7 +9,7 @@ app = FastAPI(title="Citation Network API")
 # Allow frontend to access backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Only allow your frontend
+    allow_origins=["*"],  # Only allow your frontend
     allow_credentials=True,
     allow_methods=["GET"],
     allow_headers=["*"],
