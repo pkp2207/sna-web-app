@@ -116,11 +116,11 @@ export default function Home() {
           <select 
             value={filterInstitution}
             onChange={(e) => setFilterInstitution(e.target.value)}
-            className="border rounded p-1"
+            className="border rounded p-1 text-black"
           >
-            <option value="all">All Institutions</option>
-            <option value="IIT">IIT Only</option>
-            <option value="NIT">NIT Only</option>
+            <option className='text-black' value="all">All Institutions</option>
+            <option className='text-black' value="IIT">IIT Only</option>
+            <option className='text-black' value="NIT">NIT Only</option>
           </select>
         </div>
         
@@ -133,7 +133,7 @@ export default function Home() {
       </div>
       
       {showCentrality && centrality.metrics && (
-        <div className="w-full max-w-2xl mb-4 p-4 border rounded bg-gray-50">
+        <div className="w-full max-w-2xl mb-4 p-4 border rounded bg-gray-50 text-black">
           <h2 className="text-lg font-semibold mb-2">Network Metrics</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -159,7 +159,7 @@ export default function Home() {
         </div>
       )}
       
-      <div className="w-full h-[70vh] border border-gray-300 rounded-lg">
+      <div className="w-full h-[70vh] border border-gray-300 rounded-lg overflow-hidden">
         {filteredData().nodes.length > 0 ? (
           <ForceGraph2D 
             graphData={filteredData()} 
