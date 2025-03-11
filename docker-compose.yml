@@ -9,6 +9,8 @@ services:
       - ./backend:/app
     environment:
       - ENV=production
+    networks:
+      - app-network
 
   frontend:
     build: ./frontend
@@ -17,4 +19,10 @@ services:
     depends_on:
       - backend
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
