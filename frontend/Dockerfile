@@ -14,8 +14,10 @@ COPY . .
 # # Build Next.js app
 # RUN npm run build
 
-# Expose Next.js port
-EXPOSE 3000
+# Use dynamic port from Render
+EXPOSE 10000
+CMD ["sh", "-c", "PORT=10000 npm run start"]
+
 
 # Start the Next.js server
 CMD ["npm", "run", "dev"]
