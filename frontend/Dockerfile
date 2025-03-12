@@ -11,13 +11,9 @@ RUN npm install
 # Copy all files
 COPY . .
 
-# # Build Next.js app
-# RUN npm run build
+# Build Next.js app
+RUN npm run build
 
-# Use dynamic port from Render
+# Use Render's assigned port
 EXPOSE 10000
 CMD ["sh", "-c", "PORT=10000 npm run start"]
-
-
-# Start the Next.js server
-CMD ["npm", "run", "dev"]
