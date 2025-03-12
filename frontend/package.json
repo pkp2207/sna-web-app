@@ -11,7 +11,6 @@
   "dependencies": {
     "aframe": "^1.7.0",
     "axios": "^1.7.9",
-    "frontend": "file:",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",

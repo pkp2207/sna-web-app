@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import axios from "axios";
+const Aframe = dynamic(() => import("aframe"), { ssr: false });
 
 const ForceGraph = dynamic(() => import("react-force-graph"), { ssr: false });
 
