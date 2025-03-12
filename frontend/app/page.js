@@ -1,9 +1,11 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import axios from "axios";
 
 const ForceGraph = dynamic(() => import("react-force-graph"), { ssr: false });
+
+const API_BASE_URL = "https://sna-web-app.onrender.com";
 
 const CitationNetwork = () => {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
@@ -15,8 +17,9 @@ const CitationNetwork = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get("/api/network");
+        const response = await axios.get(`${API_BASE_URL}/api/network`);
         setGraphData(response.data);
       } catch (err) {
         setError(err.response?.data?.message || err.message || "Failed to load network data.");
@@ -27,20 +30,31 @@ const CitationNetwork = () => {
     fetchData();
   }, []);
 
-  const filteredData = useCallback(() => {
-    if (filterInstitution === "all") return graphData;
+  useEffect(() => {
+    if (showCentrality) {
+      const fetchCentrality = async () => {
+        try {
+          const response = await axios.get(`${API_BASE_URL}/api/centrality`);
+          setCentrality(response.data);
+        } catch (err) {
+          console.error("Error fetching centrality data:", err);
+        }
+      };
+      fetchCentrality();
+    }
+  }, [showCentrality]);
 
-    const filteredNodes = graphData.nodes.filter(node => 
-      node.institution === filterInstitution || node.type === "coauthor"
-    );
-    
-    const nodeIds = new Set(filteredNodes.map(node => node.id));
-    const filteredLinks = graphData.links.filter(link => 
-      nodeIds.has(link.source) && nodeIds.has(link.target)
-    );
-
-    return { nodes: filteredNodes, links: filteredLinks };
-  }, [graphData, filterInstitution]);
+  const filteredData = filterInstitution === "all"
+    ? graphData
+    : {
+        nodes: graphData.nodes.filter(node => 
+          node.institution === filterInstitution || node.type === "coauthor"
+        ),
+        links: graphData.links.filter(link => 
+          graphData.nodes.some(node => node.id === link.source) &&
+          graphData.nodes.some(node => node.id === link.target)
+        ),
+      };
 
   if (loading) {
     return (
@@ -74,14 +88,14 @@ const CitationNetwork = () => {
         </button>
       </div>
       <ForceGraph
-        graphData={filteredData()}
+        graphData={filteredData}
         nodeAutoColorBy="institution"
         linkDirectionalArrowLength={3.5}
       />
-      {showCentrality && centrality?.metrics && (
+      {showCentrality && centrality && (
         <div className="p-4 bg-gray-100">
           <h3>Centrality Metrics</h3>
-          <pre>{JSON.stringify(centrality.metrics, null, 2)}</pre>
+          <pre>{JSON.stringify(centrality, null, 2)}</pre>
         </div>
       )}
     </div>
