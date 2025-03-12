@@ -19,7 +19,7 @@ const CitationNetwork = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/network`);
+        const response = await axios.get(`${API_BASE_URL}/network`);
         setGraphData(response.data);
       } catch (err) {
         setError(err.response?.data?.message || err.message || "Failed to load network data.");
